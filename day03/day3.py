@@ -15,8 +15,6 @@ __contact__ = "pylbrecht@gmail.com"
 import collections
 import sys
 
-from enum import Enum
-
 
 class Cursor:
     """
