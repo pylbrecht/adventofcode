@@ -5,57 +5,53 @@
 adventofcode.com - day 01
 """
 
-import collections
-import enum
-
-
-class Direction(enum.Enum):
-    north = 0
-    east = 1
-    south = 2
-    west = 3
-
 
 class Position:
     def __init__(self, x=0, y=0):
         self.x = x
         self.y = y
-        self.direction = Direction.north
+        # 0=north, 1=east, 2=south, 3=west
+        self.direction = 0
 
-    def turn_right(self):
-        if self.direction == Direction.north:
-            self.direction = Direction.east
-        elif self.direction == Direction.east:
-            self.direction = Direction.south
-        elif self.direction == Direction.south:
-            self.direction = Direction.west
-        elif self.direction == Direction.west:
-            self.directon = Direction.north
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
 
-    def turn_left(self):
-        if self.direction == Direction.north:
-            self.direction = Direction.west
-        elif self.direction == Direction.west:
-            self.direction = Direction.south
-        elif self.direction == Direction.south:
-            self.direction = Direction.east
-        elif self.direction == Direction.east:
-            self.directon = Direction.north
+    def move(self, instruction):
+        direction = instruction[0]
+        distance = int(instruction[1:])
 
-    def move_forward(self, num_blocks):
-        if self.direction == Direction.north:
-            self.y += num_blocks
-        elif self.direction == Direction.east:
-            self.x += num_blocks
-        elif self.direction == Direction.south:
-            self.y -= num_blocks
-        elif self.direction == Direction.west:
-            self.x -= num_blocks
+        self.turn(direction)
+        self.forward(distance)
+
+        return self
+
+    def turn(self, value):
+        if value == 'L':
+            self.direction = (self.direction - 1) % 4
+        elif value == 'R':
+            self.direction = (self.direction + 1) % 4
         else:
-            raise ValueError('invalid direction: %s' % self.direction)
+            raise ValueError('value must be "L" or "R"')
 
-    def __str__(self):
-        return '({x}, {y}) / {direction}'.format(x=self.x, y=self.y, direction=self.direction)
+    def forward(self, blocks):
+        if self.direction == 0:
+            self.y += blocks
+        elif self.direction == 1:
+            self.x += blocks
+        elif self.direction == 2:
+            self.y -= blocks
+        elif self.direction == 3:
+            self.x -= blocks
+
+
+def get_taxicab_distance(instructions):
+    position = Position(0, 0)
+
+    for instr in instructions:
+        instr = instr.strip()
+        position.move(instr)
+
+    return abs(0 - position.x) + abs(0 - position.y)
 
 
 if __name__ == '__main__':
@@ -64,25 +60,6 @@ if __name__ == '__main__':
 
     instructions = content.strip('\n').split(',')
 
-    position = Position()
+    distance = get_taxicab_distance(instructions)
 
-    for instr in instructions:
-        instr = instr.strip(' ')
-        print('handling "%s"' % instr)
-        direction = instr[0]
-
-        try:
-            distance = int(instr[1:])
-        except ValueError as err:
-            raise ValueError('invalid input: %s' % instr) from err
-
-        if direction == 'R':
-            position.turn_right()
-        elif direction == 'L':
-            position.turn_left()
-        else:
-            raise ValueError('invalid input: %s' % direction)
-
-        position.move_forward(distance)
-
-    print(abs(0 - position.x) + abs(0 - position.y))
+    print(distance)
