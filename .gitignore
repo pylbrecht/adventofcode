@@ -2,3 +2,6 @@ __pycache__
 .cache
 *.swp
 *.pyc
+
+# pyenv
+.python_version
