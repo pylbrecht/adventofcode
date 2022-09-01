@@ -25,7 +25,7 @@ def get_hash(data, algorithm="md5"):
 
 
 if __name__ == '__main__':
-    secret_key = "bgvyzdsv"
+    secret_key = "yzbqklnj"
     number = 0
 
     data = "{}{}".format(secret_key, number)

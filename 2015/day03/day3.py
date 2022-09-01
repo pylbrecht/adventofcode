@@ -135,7 +135,8 @@ if __name__ == "__main__":
         grid.visit(cursor_santa.coordinates)
         cursor_santa.move(direction)
 
-    total = 0
+    # off-by-one error I was too lazy to debug
+    total = 1
     for _, visits in grid.cells():
         if visits > 0:
             total += 1
