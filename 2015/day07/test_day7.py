@@ -3,7 +3,6 @@ import pytest
 from day7 import Program, BitwiseOperation, parse_expression
 
 
-@pytest.mark.xfail(reason="unimplemented")
 def test_example():
     code = (
         "123 -> x\n"
