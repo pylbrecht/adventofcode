@@ -1,77 +1,42 @@
-from dataclasses import dataclass
-
-
-class Program:
-    def __init__(self):
-        self.wires = {}
-
-    def run(self, code):
-        statements = [line.strip() for line in code.split("\n") if line]
-        for statement in statements:
-            expr, dest = statement.split("->")
-
-            expr = parse_expression(expr.strip())
-            dest = dest.strip()
-
-            # eval expression
-            if isinstance(expr, int):
-                self.wires[dest] = expr
-            else:
-                # bitwise
-                if expr.op == "NOT":
-                    try:
-                        right = self.wires[expr.right]
-                    except LookupError:
-                        right = expr.right
-
-                    self.wires[dest] = right ^ 0xFFFF
-                else:
-                    try:
-                        right = self.wires[expr.right]
-                    except LookupError:
-                        right = expr.right
-
-                    try:
-                        left = self.wires[expr.left]
-                    except LookupError:
-                        left = expr.left
-
-                    if expr.op == "AND":
-                        self.wires[dest] = left & right
-                    elif expr.op == "OR":
-                        self.wires[dest] = left | right
-                    elif expr.op == "LSHIFT":
-                        self.wires[dest] = left << right
-                    elif expr.op == "RSHIFT":
-                        self.wires[dest] = left >> right
-
-
-IntegerLiteral = int
-Identifier = str
-Operand = IntegerLiteral | Identifier
-
-
-@dataclass
-class BitwiseOperation:
-    op: str
-    right: Operand
-    left: Operand | None
-
-
-def parse_expression(expr):
-    if expr.isdigit():
-        return int(expr)
-
-    tokens = expr.split(" ")
+def evaluate(wire: str, instructions: dict[str, str], resolved: dict[str, int]) -> int:
+    try:
+        return int(wire)
+    except ValueError:
+        # not an integer literal
+        pass
 
     try:
-        left, op, right = tokens
-    except ValueError:
-        left, op, right = [None, *tokens]
+        return resolved[wire]
+    except LookupError:
+        pass
 
-    if left and left.isdigit():
-        left = int(left)
-    if right.isdigit():
-        right = int(right)
+    tokens = instructions[wire].split(" ")
 
-    return BitwiseOperation(left=left, op=op, right=right)
+    if len(tokens) == 1:
+        # found literal
+        return evaluate(tokens[0], instructions, resolved)
+
+    op = tokens[-2]
+
+    if op == "NOT":
+        resolved[wire] = ~evaluate(tokens[1], instructions, resolved) & 0xFFFF
+    elif op == "OR":
+        resolved[wire] = evaluate(tokens[0], instructions, resolved) | evaluate(
+            tokens[2], instructions, resolved
+        )
+    elif op == "AND":
+        resolved[wire] = evaluate(tokens[0], instructions, resolved) & evaluate(
+            tokens[2], instructions, resolved
+        )
+    elif op == "LSHIFT":
+        resolved[wire] = evaluate(tokens[0], instructions, resolved) << evaluate(
+            tokens[2], instructions, resolved
+        )
+    elif op == "RSHIFT":
+        resolved[wire] = evaluate(tokens[0], instructions, resolved) >> evaluate(
+            tokens[2], instructions, resolved
+        )
+    else:
+        raise ValueError(f"unknown op: {op}")
+
+    return resolved[wire]
