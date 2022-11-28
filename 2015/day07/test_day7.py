@@ -1,6 +1,6 @@
 import pytest
 
-from day7 import evaluate
+from day7 import evaluate, parse_instructions
 
 
 @pytest.mark.parametrize(
@@ -39,3 +39,27 @@ def test_evaluate(wire, result):
         "y": "456",
     }
     assert evaluate(wire=wire, instructions=instructions, resolved={}) == result
+
+
+def test_parse_instructions():
+    input_ = (
+        "123 -> x\n"
+        "456 -> y\n"
+        "x AND y -> d\n"
+        "x OR y -> e\n"
+        "x LSHIFT 2 -> f\n"
+        "y RSHIFT 2 -> g\n"
+        "NOT x -> h\n"
+        "NOT y -> i\n"
+    )
+    instructions = {
+        "d": "x AND y",
+        "e": "x OR y",
+        "f": "x LSHIFT 2",
+        "g": "y RSHIFT 2",
+        "h": "NOT x",
+        "i": "NOT y",
+        "x": "123",
+        "y": "456",
+    }
+    assert parse_instructions(input_) == instructions
