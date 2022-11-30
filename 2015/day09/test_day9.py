@@ -1,4 +1,4 @@
-from day9 import calc_shortest_route, calc_possible_routes
+from day9 import calc_shortest_route, calc_possible_routes, build_graph, Node
 
 import pytest
 
@@ -26,3 +26,15 @@ def test_possible_routes(distances):
         "Belfast -> London -> Dublin = 982",
     ]
     assert sorted(calc_possible_routes(distances)) == sorted(possible_routes)
+
+
+def test_build_graph(distances):
+    expected_graph = {
+        "London": {Node("Dublin", 464), Node("Belfast", 518)},
+        "Dublin": {Node("London", 464), Node("Belfast", 141)},
+        "Belfast": {Node("Dublin", 141), Node("London", 518)},
+    }
+
+    graph = build_graph(distances)
+
+    assert graph == expected_graph
