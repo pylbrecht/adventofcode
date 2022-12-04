@@ -3,7 +3,8 @@ def has_increasing_straight(password: str) -> bool:
 
 
 def has_confusing_letters(password: str) -> bool:
-    raise NotImplementedError
+    confusing_letters = "iol"
+    return any(letter in password for letter in confusing_letters)
 
 
 def increment_password(password: str) -> str:
