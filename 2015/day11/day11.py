@@ -1,3 +1,7 @@
+def has_pairs(password: str) -> bool:
+    raise NotImplementedError
+
+
 def has_increasing_straight(password: str) -> bool:
     count = 0
     for (current, next_) in zip(password, password[1:]):

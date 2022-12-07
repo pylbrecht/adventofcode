@@ -4,9 +4,21 @@ from day11 import (
     generate_next_password,
     has_increasing_straight,
     has_confusing_letters,
+    has_pairs,
 )
 
 import pytest
+
+
+@pytest.mark.parametrize(
+    "password,result",
+    [
+        ("abbcegjk", False),
+        ("abbceffg", True),
+    ],
+)
+def test_has_pairs(password, result):
+    assert has_pairs(password) is result
 
 
 @pytest.mark.parametrize(
