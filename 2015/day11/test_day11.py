@@ -34,6 +34,7 @@ def test_has_confusing_letters(password, result):
         ("xy", "xz"),
         ("xz", "ya"),
         ("ya", "yb"),
+        ("yzz", "zaa"),
     ],
 )
 def test_increment_password(password, next_password):

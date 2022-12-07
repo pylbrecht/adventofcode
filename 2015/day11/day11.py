@@ -8,7 +8,12 @@ def has_confusing_letters(password: str) -> bool:
 
 
 def increment_password(password: str) -> str:
-    raise NotImplementedError
+    next_char, carry = increment_char(password[-1], False)
+
+    if carry:
+        return increment_password(password[:-1]) + next_char
+
+    return password[:-1] + next_char
 
 
 def increment_char(char: str, carry: bool) -> tuple[str, bool]:
