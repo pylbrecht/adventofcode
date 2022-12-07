@@ -9,3 +9,11 @@ def has_confusing_letters(password: str) -> bool:
 
 def increment_password(password: str) -> str:
     raise NotImplementedError
+
+
+def increment_char(char: str, carry: bool) -> tuple[str, bool]:
+    alphabet = "abcdefghijklmnopqrstuvwxyz"
+    index = alphabet.find(char)
+    increment = 2 if carry else 1
+    carry = char == "z"
+    return alphabet[(index + increment) % len(alphabet)], carry

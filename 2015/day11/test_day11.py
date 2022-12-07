@@ -1,4 +1,4 @@
-from day11 import increment_password, has_increasing_straight, has_confusing_letters
+from day11 import increment_char, increment_password, has_increasing_straight, has_confusing_letters
 
 import pytest
 
@@ -38,3 +38,16 @@ def test_has_confusing_letters(password, result):
 )
 def test_increment_password(password, next_password):
     assert increment_password(password) == next_password
+
+
+@pytest.mark.parametrize(
+    "char,next_char,carry_in,carry_out",
+    [
+        ("x", "y", False, False),
+        ("y", "z", False, False),
+        ("z", "a", False, True),
+        ("a", "c", True, False),
+    ],
+)
+def test_increment_character(char, next_char, carry_in, carry_out):
+    assert increment_char(char, carry_in) == (next_char, carry_out)
