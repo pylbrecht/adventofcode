@@ -1,5 +1,11 @@
 def has_increasing_straight(password: str) -> bool:
-    raise NotImplementedError
+    count = 0
+    for (current, next_) in zip(password, password[1:]):
+        if next_ != increment_char(current, False)[0]:
+            return False
+        count += 1
+        if count == 3:
+            return True
 
 
 def has_confusing_letters(password: str) -> bool:
