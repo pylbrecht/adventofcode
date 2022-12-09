@@ -43,4 +43,13 @@ def increment_char(char: str, carry: bool) -> tuple[str, bool]:
 
 
 def generate_next_password(password: str) -> str:
-    raise NotImplementedError
+    validators = [
+        has_pairs,
+        has_increasing_straight,
+        no_confusing_letters,
+    ]
+
+    while not all(validator(password) for validator in validators):
+        password = increment_password(password)
+
+    return password
