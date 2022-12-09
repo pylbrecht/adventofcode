@@ -1,5 +1,13 @@
 def has_pairs(password: str) -> bool:
-    raise NotImplementedError
+    pairs = []
+    for pair in zip(password, password[1:]):
+        if pair[0] == pair[1]:
+            pairs.append(pair)
+
+        if len(pairs) == 2 and pairs[0] != pairs[1]:
+            return True
+
+    return False
 
 
 def has_increasing_straight(password: str) -> bool:

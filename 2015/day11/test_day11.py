@@ -15,6 +15,7 @@ import pytest
     [
         ("abbcegjk", False),
         ("abbceffg", True),
+        ("abcdeggg", False),
     ],
 )
 def test_has_pairs(password, result):
