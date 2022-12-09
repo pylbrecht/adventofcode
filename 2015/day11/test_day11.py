@@ -3,7 +3,7 @@ from day11 import (
     increment_password,
     generate_next_password,
     has_increasing_straight,
-    has_confusing_letters,
+    no_confusing_letters,
     has_pairs,
 )
 
@@ -42,8 +42,8 @@ def test_has_increasing_straight(password, result):
         ("abcl", True),
     ],
 )
-def test_has_confusing_letters(password, result):
-    assert has_confusing_letters(password) is result
+def test_no_confusing_letters(password, result):
+    assert no_confusing_letters(password) is not result
 
 
 @pytest.mark.parametrize(

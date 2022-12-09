@@ -20,9 +20,9 @@ def has_increasing_straight(password: str) -> bool:
             return True
 
 
-def has_confusing_letters(password: str) -> bool:
+def no_confusing_letters(password: str) -> bool:
     confusing_letters = "iol"
-    return any(letter in password for letter in confusing_letters)
+    return not any(letter in password for letter in confusing_letters)
 
 
 def increment_password(password: str) -> str:
